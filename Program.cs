@@ -24,7 +24,7 @@ namespace TopStyleAPI
             {
                 options.AddDefaultPolicy(policy =>
                 {
-                    policy.WithOrigins("http://localhost:5175")
+                    policy.WithOrigins("http://localhost:5173")
                     .AllowAnyHeader()
                     .AllowAnyMethod();
                 });
@@ -33,6 +33,9 @@ namespace TopStyleAPI
             builder.Services.AddDbContext<TopStyleContext>(
                 options => options.UseSqlServer(@"Data Source=localhost;Initial Catalog=TopStyle;Integrated Security=SSPI;TrustServerCertificate=True;")
             );
+
+            builder.Services.AddAutoMapper(typeof(Program).Assembly);
+
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<IUserService, UserService>();

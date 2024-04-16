@@ -1,4 +1,5 @@
-﻿using TopStyleAPI.Data.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using TopStyleAPI.Data.Interfaces;
 using TopStyleAPI.Domain.Entities;
 
 namespace TopStyleAPI.Data.Repository
@@ -21,12 +22,12 @@ namespace TopStyleAPI.Data.Repository
 
         public List<Order> GetMyOrders(int userID)
         {
-            throw new NotImplementedException();
+            return _context.Orders.Where(o => o.UserId == userID).ToList();
         }
 
-        public Order GetOrderDetails(int orderID)
+        public Order? GetOrderDetails(int orderID)
         {
-            throw new NotImplementedException();
+            return _context.Orders.Include(o => o.OrderProducts).ThenInclude(op => op.Product).SingleOrDefault(o => o.Id == orderID);
         }
     }
 }

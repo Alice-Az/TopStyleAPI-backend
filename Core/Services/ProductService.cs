@@ -7,20 +7,29 @@ namespace TopStyleAPI.Core.Services
 {
     public class ProductService : IProductService
     {
+        private readonly TopStyleContext _context;
+
+        public ProductService(TopStyleContext context)
+        {
+            _context = context;
+        }
+
         public ProductResponse GetProduct(int productID)
         {
 
-            using TopStyleContext db = new();
+            //using TopStyleContext db = new();
 
-            Product? product = db.Products.SingleOrDefault(p => p.Id == productID);
+            //Product? product = db.Products.SingleOrDefault(p => p.Id == productID);
+
+            Product? product = _context.Products.SingleOrDefault(p => p.Id == productID);
 
             ProductResponse response = new()
             {
-                ProductID = product.Id,
-                Name = product.ProductName,
-                Description = product.ProductDescription,
-                Price = product.ProductPrice,
-                Image = product.ProductImage
+                Id = product.Id,
+                ProductName = product.ProductName,
+                ProductDescription = product.ProductDescription,
+                ProductPrice = product.ProductPrice,
+                ProductImage = product.ProductImage
             };
 
             return response;
@@ -28,9 +37,11 @@ namespace TopStyleAPI.Core.Services
 
         public List<ProductResponse> GetProducts(string input)
         {
-            using TopStyleContext db = new();
+            //using TopStyleContext db = new();
 
-            List<Product> products = db.Products.Where(p => p.ProductName.Contains(input)).ToList();
+            //List<Product> products = db.Products.Where(p => p.ProductName.Contains(input)).ToList();
+
+            List<Product> products = _context.Products.Where(p => p.ProductName.Contains(input)).ToList();
 
             List<ProductResponse> responses = new();
 
@@ -38,11 +49,11 @@ namespace TopStyleAPI.Core.Services
             {
                 ProductResponse response = new()
                 {
-                    ProductID = product.Id,
-                    Name = product.ProductName,
-                    Description = product.ProductDescription,
-                    Price = product.ProductPrice,
-                    Image = product.ProductImage
+                    Id = product.Id,
+                    ProductName = product.ProductName,
+                    ProductDescription = product.ProductDescription,
+                    ProductPrice = product.ProductPrice,
+                    ProductImage = product.ProductImage
                 };
                 responses.Add(response);
             };

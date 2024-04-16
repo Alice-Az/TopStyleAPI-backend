@@ -1,5 +1,4 @@
 ﻿using TopStyleAPI.Core.Interfaces;
-using TopStyleAPI.Core.Services;
 using TopStyleAPI.Domain.Models.Order;
 
 namespace TopStyleAPI.Endpoints
