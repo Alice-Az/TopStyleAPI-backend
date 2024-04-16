@@ -8,16 +8,16 @@ namespace TopStyleAPI.Endpoints
         public static void RegisterEndpoints(WebApplication app)
         {
 
-            app.MapGet("/product/{productID}", (int productID, IProductService productService) =>
+            app.MapGet("/product/{productID}", async (int productID, IProductService productService) =>
             {
-                return productService.GetProduct(productID);
+                return await productService.GetProductyId(productID);
             })
             .WithName("GetProduct")
             .WithOpenApi();
 
-            app.MapGet("/products", ([FromQuery] string? search, IProductService productService) =>
+            app.MapGet("/products", async ([FromQuery] string? search, IProductService productService) =>
             {
-                return productService.GetProducts(search ?? string.Empty);
+                return await productService.GetProducts(search ?? string.Empty);
             })
             .WithName("GetProducts")
             .WithOpenApi();

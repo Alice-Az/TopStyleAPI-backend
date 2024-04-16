@@ -4,7 +4,7 @@ namespace TopStyleAPI.Core.Interfaces
 {
     public interface IUserService
     {
-        UserResponse? CreateUser(UserRequest userRequest);
-        LoginResponse? GetUser(LoginRequest loginRequest);
+        Task<UserResponse?> CreateUser(UserRequest userRequest);
+        Task<LoginResponse?> Login(LoginRequest loginRequest);
     }
 }

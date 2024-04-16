@@ -1,5 +1,6 @@
-﻿using TopStyleAPI.Core.Interfaces;
-using TopStyleAPI.Data;
+﻿using AutoMapper;
+using TopStyleAPI.Core.Interfaces;
+using TopStyleAPI.Data.Interfaces;
 using TopStyleAPI.Domain.Entities;
 using TopStyleAPI.Domain.Models.Product;
 
@@ -7,57 +8,25 @@ namespace TopStyleAPI.Core.Services
 {
     public class ProductService : IProductService
     {
-        private readonly TopStyleContext _context;
+        private readonly IProductRepo _productRepo;
+        private readonly IMapper _mapper;
 
-        public ProductService(TopStyleContext context)
+        public ProductService(IProductRepo productRepo, IMapper mapper)
         {
-            _context = context;
+            _productRepo = productRepo;
+            _mapper = mapper;
         }
 
-        public ProductResponse GetProduct(int productID)
+        public async Task<ProductResponse> GetProductyId(int productID)
         {
-
-            //using TopStyleContext db = new();
-
-            //Product? product = db.Products.SingleOrDefault(p => p.Id == productID);
-
-            Product? product = _context.Products.SingleOrDefault(p => p.Id == productID);
-
-            ProductResponse response = new()
-            {
-                Id = product.Id,
-                ProductName = product.ProductName,
-                ProductDescription = product.ProductDescription,
-                ProductPrice = product.ProductPrice,
-                ProductImage = product.ProductImage
-            };
-
-            return response;
+            Product? product = await _productRepo.GetProductById(productID);
+            return _mapper.Map<ProductResponse>(product);
         }
 
-        public List<ProductResponse> GetProducts(string input)
+        public async Task<List<ProductResponse>> GetProducts(string input)
         {
-            //using TopStyleContext db = new();
-
-            //List<Product> products = db.Products.Where(p => p.ProductName.Contains(input)).ToList();
-
-            List<Product> products = _context.Products.Where(p => p.ProductName.Contains(input)).ToList();
-
-            List<ProductResponse> responses = new();
-
-            foreach (Product product in products)
-            {
-                ProductResponse response = new()
-                {
-                    Id = product.Id,
-                    ProductName = product.ProductName,
-                    ProductDescription = product.ProductDescription,
-                    ProductPrice = product.ProductPrice,
-                    ProductImage = product.ProductImage
-                };
-                responses.Add(response);
-            };
-
+            List<Product>? products = await _productRepo.GetProducts(input);
+            List<ProductResponse> responses = _mapper.Map<List<ProductResponse>>(products);
             return responses;
         }
 

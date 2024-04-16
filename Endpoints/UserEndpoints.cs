@@ -8,9 +8,9 @@ namespace TopStyleAPI.Endpoints
         public static void RegisterEndpoints(WebApplication app)
         {
 
-            app.MapPost("/user", (UserRequest userRequest, IUserService userService) =>
+            app.MapPost("/user", async (UserRequest userRequest, IUserService userService) =>
             {
-                var userResponse = userService.CreateUser(userRequest);
+                var userResponse = await userService.CreateUser(userRequest);
                 if (userResponse is null) return Results.BadRequest("User already exists");
 
                 return Results.Ok(userResponse);
@@ -18,9 +18,9 @@ namespace TopStyleAPI.Endpoints
             .WithName("CreateUser")
             .WithOpenApi();
 
-            app.MapPost("/login", (LoginRequest loginRequest, IUserService userService) =>
+            app.MapPost("/login", async (LoginRequest loginRequest, IUserService userService) =>
             {
-                var loginResponse = userService.GetUser(loginRequest);
+                var loginResponse = await userService.Login(loginRequest);
                 if (loginResponse is null) return Results.BadRequest("Email or password incorrect");
 
                 return Results.Ok(loginResponse);

@@ -1,5 +1,6 @@
-﻿using TopStyleAPI.Core.Interfaces;
-using TopStyleAPI.Data;
+﻿using AutoMapper;
+using TopStyleAPI.Core.Interfaces;
+using TopStyleAPI.Data.Interfaces;
 using TopStyleAPI.Domain.Entities;
 using TopStyleAPI.Domain.Models.User;
 
@@ -7,45 +8,27 @@ namespace TopStyleAPI.Core.Services
 {
     public class UserService : IUserService
     {
-        public UserResponse? CreateUser(UserRequest userRequest)
+        private readonly IUserRepo _userRepo;
+        private readonly IMapper _mapper;
+
+        public UserService(IUserRepo userRepo, IMapper mapper)
         {
-            using TopStyleContext db = new();
-
-            User user = new()
-            {
-                UserEmail = userRequest.UserEmail,
-                UserPassword = userRequest.UserPassword,
-            };
-
-            bool userExists = db.Users.Any(u => u.UserEmail == userRequest.UserEmail);
-            if (!userExists) db.Users.Add(user);
-            else return null;
-
-            db.SaveChanges();
-
-            UserResponse response = new()
-            {
-                UserId = user.Id,
-                UserEmail = user.UserEmail
-            };
-            return response;
+            _userRepo = userRepo;
+            _mapper = mapper;
         }
 
-        public LoginResponse? GetUser(LoginRequest loginRequest)
+        public async Task<UserResponse?> CreateUser(UserRequest userRequest)
         {
-            using TopStyleContext db = new();
+            User? user = await _userRepo.CreateUser(_mapper.Map<User>(userRequest));
+            if (user is null) return null;
+            return _mapper.Map<UserResponse>(user);
+        }
 
-            User? user = db.Users.SingleOrDefault(u => u.UserEmail == loginRequest.LoginEmail && u.UserPassword == loginRequest.LoginPassword);
+        public async Task<LoginResponse?> Login(LoginRequest loginRequest)
+        {
+            User? user = await _userRepo.Login(loginRequest.LoginEmail, loginRequest.LoginPassword);
             if (user == null) return null;
-            else
-            {
-                LoginResponse loginResponse = new()
-                {
-                    UserId = user.Id,
-                    UserEmail = user.UserEmail,
-                };
-                return loginResponse;
-            };
+            return _mapper.Map<LoginResponse>(user);
         }
     }
 }

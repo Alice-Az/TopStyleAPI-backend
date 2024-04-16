@@ -2,7 +2,7 @@
 {
     public class UserResponse
     {
-        public int UserId { get; set; }
+        public int Id { get; set; }
 
         public string UserEmail { get; set; }
     }

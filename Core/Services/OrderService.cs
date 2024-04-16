@@ -19,9 +19,9 @@ namespace TopStyleAPI.Core.Services
             _mapper = mapper;
         }
 
-        public OrderResponse CreateOrder(OrderRequest orderRequest)
+        public async Task<OrderResponse> CreateOrder(OrderRequest orderRequest)
         {
-            List<Product> products = _productRepo.GetOrderProducts(orderRequest.ProductIDs);
+            List<Product?> products = await _productRepo.GetOrderProducts(orderRequest.ProductIDs);
 
             decimal totalPrice = 0;
 
@@ -32,17 +32,16 @@ namespace TopStyleAPI.Core.Services
             order.OrderPrice = totalPrice;
             order.OrderProducts = orderProducts;            
 
-            Order createdOrder = _orderRepo.CreateOrder(order);
+            Order createdOrder = await _orderRepo.CreateOrder(order);
 
             OrderResponse response = _mapper.Map<OrderResponse>(createdOrder);
             return response;
 
         }
 
-        public OrderDetailedResponse GetOrderDetails(int orderID)
+        public async Task<OrderDetailedResponse> GetOrderDetails(int orderID)
         {
-            Order? order = _orderRepo.GetOrderDetails(orderID);
-
+            Order? order = await _orderRepo.GetOrderDetails(orderID);
             List<OrderProductResponse> orderProductResponseList = order.OrderProducts.Select(op => _mapper.Map<OrderProductResponse>(op.Product)).ToList();
 
             OrderDetailedResponse orderResponse = _mapper.Map<OrderDetailedResponse>(order);
@@ -51,9 +50,9 @@ namespace TopStyleAPI.Core.Services
             return orderResponse;
         }
 
-        public List<OrderResponse> GetMyOrders(int userID)
+        public async Task<List<OrderResponse>> GetMyOrders(int userID)
         {
-            List<Order>? orders = _orderRepo.GetMyOrders(userID);
+            List<Order>? orders = await _orderRepo.GetMyOrders(userID);
             return _mapper.Map<List<OrderResponse>>(orders);
         }
 

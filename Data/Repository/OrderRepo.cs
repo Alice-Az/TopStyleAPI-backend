@@ -13,21 +13,21 @@ namespace TopStyleAPI.Data.Repository
             _context = context;
         }
 
-        public Order CreateOrder(Order order)
+        public async Task<Order> CreateOrder(Order order)
         {
-            _context.Orders.Add(order);
-            _context.SaveChanges();
+            await _context.Orders.AddAsync(order);
+            await _context.SaveChangesAsync();
             return order;
         }
 
-        public List<Order> GetMyOrders(int userID)
+        public async Task<List<Order>> GetMyOrders(int userID)
         {
-            return _context.Orders.Where(o => o.UserId == userID).ToList();
+            return await _context.Orders.Where(o => o.UserId == userID).ToListAsync();
         }
 
-        public Order? GetOrderDetails(int orderID)
+        public async Task<Order?> GetOrderDetails(int orderID)
         {
-            return _context.Orders.Include(o => o.OrderProducts).ThenInclude(op => op.Product).SingleOrDefault(o => o.Id == orderID);
+            return await _context.Orders.Include(o => o.OrderProducts).ThenInclude(op => op.Product).SingleOrDefaultAsync(o => o.Id == orderID);
         }
     }
 }
