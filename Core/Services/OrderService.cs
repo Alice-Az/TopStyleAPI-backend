@@ -19,7 +19,7 @@ namespace TopStyleAPI.Core.Services
             _mapper = mapper;
         }
 
-        public async Task<OrderResponse?> CreateOrder(OrderRequest orderRequest)
+        public async Task<OrderResponse?> CreateOrder(OrderRequest orderRequest, int userId)
         {
             List<Product>? products = await _productRepo.GetOrderProducts(orderRequest.ProductIDs);
 
@@ -31,6 +31,7 @@ namespace TopStyleAPI.Core.Services
             totalPrice = products.Sum(p => p.ProductPrice);
 
             Order order = _mapper.Map<Order>(orderRequest);
+            order.UserId = userId;
             order.OrderPrice = totalPrice;
             order.OrderProducts = orderProducts;            
 
