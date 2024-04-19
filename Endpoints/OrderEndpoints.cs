@@ -1,4 +1,5 @@
-﻿using TopStyleAPI.Core.Interfaces;
+﻿using System.Security.Claims;
+using TopStyleAPI.Core.Interfaces;
 using TopStyleAPI.Domain.Models.Order;
 
 namespace TopStyleAPI.Endpoints
@@ -9,21 +10,31 @@ namespace TopStyleAPI.Endpoints
         {
             app.MapPost("/order", async (OrderRequest orderRequest, IOrderService orderService) =>
             {
-                return await orderService.CreateOrder(orderRequest);
+                OrderResponse? orderResponse = await orderService.CreateOrder(orderRequest);
+                if (orderResponse != null) return Results.Ok(orderResponse);
+                return Results.BadRequest();
             })
             .WithName("CreateOrder")
             .WithOpenApi();
 
-            app.MapGet("/orders/{userID}", async (int userID, IOrderService orderService) =>
+            app.MapGet("/orders", async (ClaimsPrincipal user, IOrderService orderService) =>
             {
-                return await orderService.GetMyOrders(userID);
+                var userId = user.Claims.First(c => c.Type == ClaimTypes.Sid).Value;
+
+                List<OrderResponse>? orderResponses = await orderService.GetMyOrders(int.Parse(userId));
+                if (orderResponses != null) return Results.Ok(orderResponses);
+                //if (orderResponses != null) return Results.StatusCode(StatusCodes.Status500InternalServerError);
+                return Results.StatusCode(StatusCodes.Status500InternalServerError);
             })
+            .RequireAuthorization()
             .WithName("GetMyOrders")
             .WithOpenApi();
 
             app.MapGet("/order/{orderID}", async (int orderID, IOrderService orderService) =>
             {
-                return await orderService.GetOrderDetails(orderID);
+                OrderDetailedResponse? orderResponse = await orderService.GetOrderDetails(orderID);
+                if (orderResponse != null) return Results.Ok(orderResponse);
+                return Results.BadRequest();
             })
             .WithName("GetOrderDetails")
             .WithOpenApi();

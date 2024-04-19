@@ -13,26 +13,40 @@ namespace TopStyleAPI.Data.Repository
             _context = context;
         }
 
-        public async Task<List<Product?>> GetOrderProducts(List<int> productsIds)
+        public async Task<List<Product>?> GetOrderProducts(List<int> productsIds)
         {
-            List<Product?> products = [];
-            foreach(int productId in productsIds)
+            try
             {
-                Product? product = await _context.Products.SingleOrDefaultAsync(p => p.Id == productId);
-                if (product != null) products.Add(product);
+                List<Product>? products = [];
+                foreach (int productId in productsIds)
+                {
+                    Product? product = await _context.Products.SingleOrDefaultAsync(p => p.Id == productId);
+                    if (product != null) products.Add(product);
+                }
+                return products;
             }
-
-            return products;
+            catch { return null; }
+            
         }
 
         public async Task<Product?> GetProductById(int productId)
         {
-            return await _context.Products.SingleOrDefaultAsync(p => p.Id == productId);
+            try
+            {
+                return await _context.Products.SingleOrDefaultAsync(p => p.Id == productId);
+            }
+            catch { return null; }
+            
         }
 
         public async Task<List<Product>?> GetProducts(string input)
         {
-            return await _context.Products.Where(p => p.ProductName.Contains(input)).ToListAsync();
+            try
+            {
+                return await _context.Products.Where(p => p.ProductName.Contains(input)).ToListAsync();
+            }
+            catch { return null; }
+            
         }
     }
 }

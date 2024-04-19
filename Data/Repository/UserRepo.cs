@@ -15,17 +15,27 @@ namespace TopStyleAPI.Data.Repository
 
         public async Task<User?> CreateUser(User user)
         {
-            bool userExists = await _context.Users.AnyAsync(u => u.UserEmail == user.UserEmail);
-            if (userExists) return null;
-            await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync();
-            return user;
+            try
+            {
+                bool userExists = await _context.Users.AnyAsync(u => u.UserEmail == user.UserEmail);
+                if (userExists) return null;
+                await _context.Users.AddAsync(user);
+                await _context.SaveChangesAsync();
+                return user;
+            }
+            catch { return null; }
+           
         }
 
         public async Task<User?> Login(string email, string password)
         {
-            User? user = await _context.Users.SingleOrDefaultAsync(u => u.UserEmail == email && u.UserPassword == password);
-            return user;
+            try
+            {
+                User? user = await _context.Users.SingleOrDefaultAsync(u => u.UserEmail == email && u.UserPassword == password);
+                return user;
+            }
+            catch { return null; }
+            
         }
     }
 }

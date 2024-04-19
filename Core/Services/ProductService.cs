@@ -17,15 +17,18 @@ namespace TopStyleAPI.Core.Services
             _mapper = mapper;
         }
 
-        public async Task<ProductResponse> GetProductyId(int productID)
+        public async Task<ProductResponse?> GetProductyId(int productID)
         {
             Product? product = await _productRepo.GetProductById(productID);
+            if (product == null) return null;
             return _mapper.Map<ProductResponse>(product);
         }
 
-        public async Task<List<ProductResponse>> GetProducts(string input)
+        public async Task<List<ProductResponse>?> GetProducts(string input)
         {
             List<Product>? products = await _productRepo.GetProducts(input);
+            if (products == null) return null;
+
             List<ProductResponse> responses = _mapper.Map<List<ProductResponse>>(products);
             return responses;
         }

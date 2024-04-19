@@ -21,7 +21,7 @@ namespace TopStyleAPI.Endpoints
             app.MapPost("/login", async (LoginRequest loginRequest, IUserService userService) =>
             {
                 var loginResponse = await userService.Login(loginRequest);
-                if (loginResponse is null) return Results.BadRequest("Email or password incorrect");
+                if (loginResponse is null) return Results.BadRequest();
 
                 return Results.Ok(loginResponse);
             })

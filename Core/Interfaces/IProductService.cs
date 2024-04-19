@@ -4,8 +4,8 @@ namespace TopStyleAPI.Core.Interfaces
 {
     public interface IProductService
     {
-        Task<ProductResponse> GetProductyId(int productID);
-        Task<List<ProductResponse>> GetProducts(string input);
+        Task<ProductResponse?> GetProductyId(int productID);
+        Task<List<ProductResponse>?> GetProducts(string input);
 
     }
 }

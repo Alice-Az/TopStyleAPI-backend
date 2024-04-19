@@ -19,11 +19,13 @@ namespace TopStyleAPI.Core.Services
             _mapper = mapper;
         }
 
-        public async Task<OrderResponse> CreateOrder(OrderRequest orderRequest)
+        public async Task<OrderResponse?> CreateOrder(OrderRequest orderRequest)
         {
-            List<Product?> products = await _productRepo.GetOrderProducts(orderRequest.ProductIDs);
+            List<Product>? products = await _productRepo.GetOrderProducts(orderRequest.ProductIDs);
 
             decimal totalPrice = 0;
+
+            if (products == null) return null;
 
             List<OrderProduct> orderProducts = products.Select(p => new OrderProduct() { ProductId = p.Id }).ToList();
             totalPrice = products.Sum(p => p.ProductPrice);
@@ -32,16 +34,18 @@ namespace TopStyleAPI.Core.Services
             order.OrderPrice = totalPrice;
             order.OrderProducts = orderProducts;            
 
-            Order createdOrder = await _orderRepo.CreateOrder(order);
+            Order? createdOrder = await _orderRepo.CreateOrder(order);
 
-            OrderResponse response = _mapper.Map<OrderResponse>(createdOrder);
+            OrderResponse? response = _mapper.Map<OrderResponse?>(createdOrder);
             return response;
 
         }
 
-        public async Task<OrderDetailedResponse> GetOrderDetails(int orderID)
+        public async Task<OrderDetailedResponse?> GetOrderDetails(int orderID)
         {
             Order? order = await _orderRepo.GetOrderDetails(orderID);
+            if (order == null) return null;
+
             List<OrderProductResponse> orderProductResponseList = order.OrderProducts.Select(op => _mapper.Map<OrderProductResponse>(op.Product)).ToList();
 
             OrderDetailedResponse orderResponse = _mapper.Map<OrderDetailedResponse>(order);
@@ -50,9 +54,10 @@ namespace TopStyleAPI.Core.Services
             return orderResponse;
         }
 
-        public async Task<List<OrderResponse>> GetMyOrders(int userID)
+        public async Task<List<OrderResponse>?> GetMyOrders(int userID)
         {
             List<Order>? orders = await _orderRepo.GetMyOrders(userID);
+            if (orders == null) return null;
             return _mapper.Map<List<OrderResponse>>(orders);
         }
 

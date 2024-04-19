@@ -1,4 +1,8 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using TopStyleAPI.Configuration;
 using TopStyleAPI.Core.Interfaces;
 using TopStyleAPI.Core.Services;
 using TopStyleAPI.Data;
@@ -43,6 +47,24 @@ namespace TopStyleAPI
             builder.Services.AddScoped<IProductRepo, ProductRepo>();
             builder.Services.AddScoped<IUserRepo, UserRepo>();
 
+            SecurityOptions security = builder.Configuration.GetSection("Security").Get<SecurityOptions>() ?? new();
+            builder.Services.AddAuthentication(opt =>
+            {
+                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(opt => {
+                    opt.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = security.Issuer,
+                        ValidAudience = security.Audience,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(security.Key))
+                    };
+                });
 
             var app = builder.Build();
 

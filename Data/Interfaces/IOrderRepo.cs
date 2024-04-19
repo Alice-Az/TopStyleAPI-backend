@@ -4,8 +4,8 @@ namespace TopStyleAPI.Data.Interfaces
 {
     public interface IOrderRepo
     {
-        Task<Order> CreateOrder(Order order);
+        Task<Order?> CreateOrder(Order order);
         Task<Order?> GetOrderDetails(int orderID);
-        Task<List<Order>> GetMyOrders(int userID);
+        Task<List<Order>?> GetMyOrders(int userID);
     }
 }
