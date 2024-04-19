@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TopStyleAPI.Domain.Entities;
 
+[Table("OrdersNew")]
 public class Order
 {
     [Key]

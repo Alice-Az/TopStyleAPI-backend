@@ -5,13 +5,13 @@
 namespace TopStyleAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class giveup : Migration
+    public partial class newdb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Products",
+                name: "ProductNew",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -23,11 +23,11 @@ namespace TopStyleAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Products", x => x.Id);
+                    table.PrimaryKey("PK_ProductNew", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
+                name: "UserNew",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -37,11 +37,11 @@ namespace TopStyleAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.PrimaryKey("PK_UserNew", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Orders",
+                name: "OrderNew",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -55,17 +55,17 @@ namespace TopStyleAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.PrimaryKey("PK_OrderNew", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Orders_Users_UserId",
+                        name: "FK_OrderNew_UserNew_UserId",
                         column: x => x.UserId,
-                        principalTable: "Users",
+                        principalTable: "UserNew",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrderProducts",
+                name: "OrderProductNew",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -75,51 +75,51 @@ namespace TopStyleAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrderProducts", x => x.Id);
+                    table.PrimaryKey("PK_OrderProductNew", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OrderProducts_Orders_OrderId",
+                        name: "FK_OrderProductNew_OrderNew_OrderId",
                         column: x => x.OrderId,
-                        principalTable: "Orders",
+                        principalTable: "OrderNew",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_OrderProducts_Products_ProductId",
+                        name: "FK_OrderProductNew_ProductNew_ProductId",
                         column: x => x.ProductId,
-                        principalTable: "Products",
+                        principalTable: "ProductNew",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderProducts_OrderId",
-                table: "OrderProducts",
+                name: "IX_OrderNew_UserId",
+                table: "OrderNew",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderProductNew_OrderId",
+                table: "OrderProductNew",
                 column: "OrderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderProducts_ProductId",
-                table: "OrderProducts",
+                name: "IX_OrderProductNew_ProductId",
+                table: "OrderProductNew",
                 column: "ProductId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Orders_UserId",
-                table: "Orders",
-                column: "UserId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "OrderProducts");
+                name: "OrderProductNew");
 
             migrationBuilder.DropTable(
-                name: "Orders");
+                name: "OrderNew");
 
             migrationBuilder.DropTable(
-                name: "Products");
+                name: "ProductNew");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "UserNew");
         }
     }
 }

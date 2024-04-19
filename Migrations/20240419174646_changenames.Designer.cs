@@ -11,8 +11,8 @@ using TopStyleAPI.Data;
 namespace TopStyleAPI.Migrations
 {
     [DbContext(typeof(TopStyleContext))]
-    [Migration("20240415174318_giveup")]
-    partial class giveup
+    [Migration("20240419174646_changenames")]
+    partial class changenames
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -58,7 +58,7 @@ namespace TopStyleAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("OrdersNew");
                 });
 
             modelBuilder.Entity("TopStyleAPI.Domain.Entities.OrderProduct", b =>
@@ -81,7 +81,7 @@ namespace TopStyleAPI.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderProducts");
+                    b.ToTable("OrderProductsNew");
                 });
 
             modelBuilder.Entity("TopStyleAPI.Domain.Entities.Product", b =>
@@ -108,7 +108,7 @@ namespace TopStyleAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products");
+                    b.ToTable("ProductsNew");
                 });
 
             modelBuilder.Entity("TopStyleAPI.Domain.Entities.User", b =>
@@ -129,7 +129,7 @@ namespace TopStyleAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("UsersNew");
                 });
 
             modelBuilder.Entity("TopStyleAPI.Domain.Entities.Order", b =>

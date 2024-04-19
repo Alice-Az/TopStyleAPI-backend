@@ -34,8 +34,9 @@ namespace TopStyleAPI
                 });
             });
 
+            var connectionString = builder.Configuration.GetConnectionString("topstyledb");
             builder.Services.AddDbContext<TopStyleContext>(
-                options => options.UseSqlServer(@"Data Source=localhost;Initial Catalog=TopStyle;Integrated Security=SSPI;TrustServerCertificate=True;")
+                options => options.UseSqlServer(connectionString)
             );
 
             builder.Services.AddAutoMapper(typeof(Program).Assembly);

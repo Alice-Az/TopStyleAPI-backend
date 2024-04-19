@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TopStyleAPI.Data;
 
@@ -10,9 +11,11 @@ using TopStyleAPI.Data;
 namespace TopStyleAPI.Migrations
 {
     [DbContext(typeof(TopStyleContext))]
-    partial class TopStyleContextModelSnapshot : ModelSnapshot
+    [Migration("20240419174229_newdb")]
+    partial class newdb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,7 +58,7 @@ namespace TopStyleAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("OrdersNew");
+                    b.ToTable("OrderNew");
                 });
 
             modelBuilder.Entity("TopStyleAPI.Domain.Entities.OrderProduct", b =>
@@ -78,7 +81,7 @@ namespace TopStyleAPI.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderProductsNew");
+                    b.ToTable("OrderProductNew");
                 });
 
             modelBuilder.Entity("TopStyleAPI.Domain.Entities.Product", b =>
@@ -105,7 +108,7 @@ namespace TopStyleAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductsNew");
+                    b.ToTable("ProductNew");
                 });
 
             modelBuilder.Entity("TopStyleAPI.Domain.Entities.User", b =>
@@ -126,7 +129,7 @@ namespace TopStyleAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UsersNew");
+                    b.ToTable("UserNew");
                 });
 
             modelBuilder.Entity("TopStyleAPI.Domain.Entities.Order", b =>
