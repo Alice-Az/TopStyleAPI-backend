@@ -21,6 +21,8 @@ namespace TopStyleAPI
             // Add services to the container.
             builder.Services.AddAuthorization();
 
+            builder.Services.AddHealthChecks();
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -81,6 +83,8 @@ namespace TopStyleAPI
             app.UseCors();
 
             app.UseAuthorization();
+
+            app.MapHealthChecks("/health_check");
 
             ProductEndpoints.RegisterEndpoints(app);
             OrderEndpoints.RegisterEndpoints(app);
