@@ -79,6 +79,7 @@ namespace TopStyleAPI
             }
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
             app.UseCors();
 
